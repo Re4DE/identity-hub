@@ -1,0 +1,40 @@
+stages:
+  - test
+  - docker
+
+default:
+  tags:
+    - dena
+
+unit-test:
+  image: eclipse-temurin:17-jdk-alpine
+  stage: test
+  parallel:
+    matrix:
+      - DIR: identityhub
+        IMG: identityhub
+  script:
+    - chmod +x ./gradlew
+    - ./gradlew -p "runtimes/$DIR" test
+
+docker-build-publish:
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [ "" ]
+  stage: docker
+  parallel:
+    matrix:
+      - DIR: identityhub
+        IMG: identityhub
+  variables:
+      IMAGE_NAME: $CI_REGISTRY_IMAGE/$IMG:$CI_COMMIT_TAG
+  before_script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+  script:
+    - /kaniko/executor
+      --context "."
+      --dockerfile "./runtimes/$DIR/src/main/docker/Dockerfile"
+      --destination "${IMAGE_NAME}"
+  rules:
+    - if: $CI_COMMIT_TAG
