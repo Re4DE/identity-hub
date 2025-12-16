@@ -36,8 +36,8 @@ import static java.util.Optional.ofNullable;
 public class SuperUserSeedExtension implements ServiceExtension {
     public static final String DEFAULT_SUPER_USER_PARTICIPANT_ID = "super-user";
 
-    @Setting(description = "Explicitly set the initial API key for the Super User, if empty autogenerate")
-    public static final String SUPERUSER_APIKEY = "edc.ih.api.superuser.key";
+    @Setting(key = "edc.ih.api.superuser.key", description = "Explicitly set the initial API key for the Super User, if empty autogenerate", required = false)
+    private String superUserApiKey;
 
     @Inject
     private ParticipantContextService participantContextService;
@@ -45,12 +45,10 @@ public class SuperUserSeedExtension implements ServiceExtension {
     @Inject
     private Vault vault;
 
-    private String superUserApiKey;
     private Monitor monitor;
 
     @Override
     public void initialize(ServiceExtensionContext context) {
-        this.superUserApiKey = context.getSetting(SUPERUSER_APIKEY, "");
         this.monitor = context.getMonitor();
     }
 
