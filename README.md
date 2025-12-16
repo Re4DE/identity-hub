@@ -1,17 +1,55 @@
 # Identity Hub
 
+[![license](https://img.shields.io/github/license/eclipse-edc/Connector?style=flat-square&logo=apache)](https://www.apache.org/licenses/LICENSE-2.0)
+
+---
+
 This Identity Hub is based on the [EDC Identity Hub](https://github.com/eclipse-edc/IdentityHub) in the version 0.14.0.
+The Identity Hub need a running instance of a `PostgreSQL` database and a `HashiCorp Vault`.
+The Identity Hub is part of the Connector software bundle. 
+A productive standalone deployment is possible, but requires a deeply technical understanding of the EDCs.
 
-## Requirements
+## Versioning
 
-The Identity Hub can be deployed without any other services.
-However, without a Connector it is useless.
-To deploy the Identity Hub alongside a Connector see the [Connector](https://gitlab.cc-asp.fraunhofer.de/future-energy-lab-testfeld/connector) documentation.
+We use semantic versioning and add the Eclipse Dataspace Components (EDC) version as a label to indicate compatibility.
+For example, version `1.0.0-edc0.14.0` means that version `1.0.0` of the Identity Hub is compatible with all EDCs of version `0.14.0`.
+If possible, we provide backports of fixes that affect older EDC versions as well.
+To get the latest build of the Identity Hub, use the version `SNAPSHOT`.
 
 ## Configuration
 
-As the Identity Hub can not be deployed without a Connector, a complete 
-description of the configuration is part of the Connector [Helm Chart](https://gitlab.cc-asp.fraunhofer.de/future-energy-lab-testfeld/connector/-/blob/main/charts/connector-ssi/README.md?ref_type=heads).
+The configuration parameters in the following table are the minimum fields needed to set up a local startup.
+Many more configuration parameters are inherent from the EDCs, compare [EDC](https://github.com/eclipse-edc/IdentityHub).
+
+| Name                                    | Example Value                        | Description                                                                                                                         |
+|-----------------------------------------|--------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| edc.participant.id                      | did:web:localhost%3A10085:tester     | The ID of this Identity Hub, represented as DID:WEB, needs to be identical with the particpant ID of the used Connector             |
+| edc.component.id                        | identityhub                          | The ID of this runtime component                                                                                                    |
+| edc.hostname                            | localhost                            | Hostname of the Identity Hub                                                                                                        |
+| edc.iam.did.web.use.https               | false                                | Switch between https and http for did providing, only `false` for local development                                                 |
+| edc.issuer.api.superuser.key            | c3VwZXItdXNlcg==.devpass             | The api key of the super user in the form of 'base64(<participantId>).<random-string>'. If not present a random string will be used | 
+| web.http.path                           | /api                                 | Default api path                                                                                                                    |
+| web.http.port                           | 10080                                | Default api port                                                                                                                    |
+| web.http.credentials.path               | /api/credentials                     | Credential api path                                                                                                                 |
+| web.http.credentials.port               | 10081                                | Credential api port                                                                                                                 |
+| web.http.identity.path                  | /api/identity                        | Identity api path                                                                                                                   |
+| web.http.identity.port                  | 10082                                | Identity api port                                                                                                                   |
+| web.http.sts.path                       | /api/sts                             | STS token api path                                                                                                                  |
+| web.http.sts.port                       | 10083                                | STS token api port                                                                                                                  |
+| web.http.version.path                   | /api/version                         | Version api path                                                                                                                    |
+| web.http.version.port                   | 10084                                | Version api port                                                                                                                    |
+| web.http.did.path                       | /                                    | DID api path                                                                                                                        |
+| web.http.did.port                       | 10085                                | DID api port. If you change the port, the `edc.participant.id` needs to be updated accordingly                                      |
+| edc.vault.hashicorp.url                 | http://localhost:8200                | The URL of the `HashiCorp Vault`                                                                                                    |
+| edc.vault.hashicorp.token               | devpass                              | The `HashiCorp Vault` access token                                                                                                  |
+| edc.sql.schema.autocreate               | true                                 | Flag to autogenerate tables in the `PostgreSQL` if not already done                                                                 |
+| edc.datasource.default.user             | edc                                  | Username to authenticate in the database                                                                                            |
+| edc.datasource.default.password         | devpass                              | Password to authenticate in the database                                                                                            |
+| edc.datasource.default.url              | jdbc:postgresql://localhost:5432/edc | Connection URL of the database                                                                                                      |
+
+## Production Deployment
+
+The Identity Hub is part of the Connector software bundle. The productive deployment is part of the Connector [Helm Chart](...).
 
 ## Local development
 
@@ -19,8 +57,10 @@ Follow these step to use the `local-dev` runtime.
 
 ### 1. Start environment from the connector repository
 
-As the Identity Hub can not be used without a Connector, there need to be a running instance of it.
-You can use the [local-dev](https://gitlab.cc-asp.fraunhofer.de/future-energy-lab-testfeld/connector#1-start-environment-with-docker-compose) runtime from the Connector for that.
+As the Identity Hub cannot be used without a `PostgreSQL` database and a `HashiCorp Vault`, there must be a running instances of both.
+You can use the [local-dev](...) runtime from the connector repository for that.
+Furthermore, there needs to be a running instance of the Connector. 
+You can use the local development environments of the [control-plane](...) and [data-plane](...).
 
 ### 2. Start the Identity Hub
 
@@ -31,3 +71,4 @@ java '-Dedc.fs.config=runtimes/local-dev/src/main/resources/config.properties' -
 ```
 
 The build command is only needed if you have done some changes on the source code.
+Both can also be triggered directly from your IDE, such as IntelliJ.
