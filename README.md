@@ -1,4 +1,4 @@
-# Dena Identity Hub
+# Identity Hub
 
 This Identity Hub is based on the [EDC Identity Hub](https://github.com/eclipse-edc/IdentityHub) in the version 0.14.0.
 
