@@ -27,7 +27,7 @@ pluginManagement {
 }
 
 // add dependencies
+include(":extensions:superuser-seed")
+
 include(":runtimes:identityhub")
 include(":runtimes:local-dev")
-
-include(":extensions:superuser-seed")
