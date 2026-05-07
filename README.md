@@ -49,7 +49,7 @@ Many more configuration parameters are inherent from the EDCs, compare [EDC](htt
 
 ## Production Deployment
 
-The Identity Hub is part of the Connector software bundle. The productive deployment is part of the Connector [Helm Chart](...).
+The Identity Hub is part of the Connector software bundle. The productive deployment is part of the Connector [Helm Chart](https://github.com/Re4DE/connector/blob/main/charts/connector-dcp/README.md).
 
 ## Local development
 
@@ -58,9 +58,9 @@ Follow these step to use the `local-dev` runtime.
 ### 1. Start environment from the connector repository
 
 As the Identity Hub cannot be used without a `PostgreSQL` database and a `HashiCorp Vault`, there must be a running instances of both.
-You can use the [local-dev](...) runtime from the connector repository for that.
+You can use the [local-dev](https://github.com/Re4DE/connector/blob/main/runtimes/local-dev/docker-env/src/main/docker/docker-compose.yaml) runtime from the connector repository for that.
 Furthermore, there needs to be a running instance of the Connector. 
-You can use the local development environments of the [control-plane](...) and [data-plane](...).
+You can use the local development environments of the [control-plane](https://github.com/Re4DE/connector/tree/main/runtimes/local-dev/controlplane-local) and [data-plane](https://github.com/Re4DE/connector/tree/main/runtimes/local-dev/dataplane-local).
 
 ### 2. Start the Identity Hub
 
