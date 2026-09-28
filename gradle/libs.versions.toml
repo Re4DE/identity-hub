@@ -9,6 +9,7 @@ shadow = "8.3.6"
 [libraries]
 # edc libs
 edc-vault-hashicorp = { module = "org.eclipse.edc:vault-hashicorp", version.ref = "edc" }
+edc-junit = { module = "org.eclipse.edc:junit", version.ref = "edc" }
 
 # ih libs
 edc-ih-credentials-spi = { module = "org.eclipse.edc:verifiable-credential-spi", version.ref = "edc" }
