@@ -77,7 +77,8 @@ public class SuperUserSeedExtension implements ServiceExtension {
                     ofNullable(this.superUserApiKey)
                             .map(key -> {
                                 if (!key.contains(".")) {
-                                    monitor.warning("Super-user key override: this key appears to have an invalid format, you may be unable to access some APIs. It must follow the structure: 'base64(<participantId>).<random-string>'");
+                                    monitor.severe("Super-user key override: this key appears to have an invalid format, you may be unable to access some APIs. It must follow the structure: 'base64(<participantId>).<random-string>'");
+                                    return generatedKey.apiKey();
                                 }
                                 participantContextService.getParticipantContext(DEFAULT_SUPER_USER_PARTICIPANT_ID)
                                         .onSuccess(pc -> vault.storeSecret(pc.getApiTokenAlias(), key)
@@ -87,7 +88,7 @@ public class SuperUserSeedExtension implements ServiceExtension {
                                 return key;
                             })
                             .orElseGet(() -> {
-                                monitor.info("Super User key not provided. Generated: %s".formatted(generatedKey));
+                                monitor.info("Super User key not provided. Generated: %s".formatted(generatedKey.apiKey()));
                                 return generatedKey.apiKey();
                             });
                 })
