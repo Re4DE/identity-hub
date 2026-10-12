@@ -74,12 +74,14 @@ class SuperUserSeedExtensionTest {
         verify(participantContextService).createParticipantContext(captor.capture());
 
         var manifest = captor.getValue();
-        assertThat(manifest.getParticipantId()).isEqualTo(SUPER_USER_PARTICIPANT_ID);
+        var key = manifest.getKeys().stream().filter(k -> k.getKeyId().equals("super-user#key-1")).findFirst().orElse(null);
+        assertThat(manifest.getParticipantContextId()).isEqualTo(SUPER_USER_PARTICIPANT_ID);
         assertThat(manifest.getDid()).isEqualTo("did:web:%s".formatted(SUPER_USER_PARTICIPANT_ID));
         assertThat(manifest.isActive()).isTrue();
-        assertThat(manifest.getKey().getKeyId()).isEqualTo("super-user#key-1");
-        assertThat(manifest.getKey().getPrivateKeyAlias()).isEqualTo("super-user#key-1");
-        assertThat(manifest.getKey().getKeyGeneratorParams()).containsEntry("algorithm", "EdDSA").containsEntry("curve", "Ed25519");
+        assertThat(key).isNotNull();
+        assertThat(key.getKeyId()).isEqualTo("super-user#key-1");
+        assertThat(key.getPrivateKeyAlias()).isEqualTo("super-user#key-1");
+        assertThat(key.getKeyGeneratorParams()).containsEntry("algorithm", "EdDSA").containsEntry("curve", "Ed25519");
         assertThat(manifest.getRoles()).containsExactly(ServicePrincipal.ROLE_ADMIN);
 
         verify(monitor).info(contains("Super User key not provided. Generated:"));

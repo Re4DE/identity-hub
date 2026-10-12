@@ -62,7 +62,7 @@ public class SuperUserSeedExtension implements ServiceExtension {
 
         // Create the Super User
         this.participantContextService.createParticipantContext(ParticipantManifest.Builder.newInstance()
-                        .participantId(DEFAULT_SUPER_USER_PARTICIPANT_ID)
+                        .participantContextId(DEFAULT_SUPER_USER_PARTICIPANT_ID)
                         .did("did:web:%s".formatted(DEFAULT_SUPER_USER_PARTICIPANT_ID))
                         .active(true)
                         .key(KeyDescriptor.Builder.newInstance()
