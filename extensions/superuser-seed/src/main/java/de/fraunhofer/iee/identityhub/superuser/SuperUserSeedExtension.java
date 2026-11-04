@@ -56,7 +56,7 @@ public class SuperUserSeedExtension implements ServiceExtension {
     public void start() {
         // Only create the Super User if not present
         if (participantContextService.getParticipantContext(DEFAULT_SUPER_USER_PARTICIPANT_ID).succeeded()) {
-            monitor.debug("Super User already created, skip seeding");
+            monitor.info("Super User already created, skip seeding");
             return;
         }
 
@@ -82,7 +82,7 @@ public class SuperUserSeedExtension implements ServiceExtension {
                                 }
                                 participantContextService.getParticipantContext(DEFAULT_SUPER_USER_PARTICIPANT_ID)
                                         .onSuccess(pc -> vault.storeSecret(pc.getApiTokenAlias(), key)
-                                                .onSuccess(v -> monitor.debug("Super User key override successful"))
+                                                .onSuccess(v -> monitor.info("Super User key override successful"))
                                                 .onFailure(f -> monitor.warning("Error storing API key in vault: %s".formatted(f.getFailureDetail()))))
                                         .onFailure(f -> monitor.warning("Error overriding API key for '%s': %s".formatted(DEFAULT_SUPER_USER_PARTICIPANT_ID, f.getFailureDetail())));
                                 return key;

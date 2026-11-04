@@ -57,7 +57,7 @@ class SuperUserSeedExtensionTest {
         var extension = extension(factory, context, null);
         extension.start();
 
-        verify(monitor).debug("Super User already created, skip seeding");
+        verify(monitor).info("Super User already created, skip seeding");
         verify(participantContextService, never()).createParticipantContext(any());
         verifyNoInteractions(vault);
     }
@@ -100,7 +100,7 @@ class SuperUserSeedExtensionTest {
         var extension = extension(factory, context, SUPER_USER_API_KEY);
         extension.start();
 
-        verify(monitor).debug("Super User key override successful");
+        verify(monitor).info("Super User key override successful");
         verify(vault).storeSecret(API_TOKEN_ALIAS, SUPER_USER_API_KEY);
     }
 
