@@ -1,10 +1,9 @@
 package de.fraunhofer.iee.identityhub.superuser;
 
 import org.eclipse.edc.boot.system.injection.ObjectFactory;
-import org.eclipse.edc.identityhub.spi.authentication.ServicePrincipal;
-import org.eclipse.edc.identityhub.spi.participantcontext.ParticipantContextService;
+import org.eclipse.edc.identityhub.spi.participantcontext.IdentityHubParticipantContextService;
 import org.eclipse.edc.identityhub.spi.participantcontext.model.CreateParticipantContextResponse;
-import org.eclipse.edc.identityhub.spi.participantcontext.model.ParticipantContext;
+import org.eclipse.edc.identityhub.spi.participantcontext.model.IdentityHubParticipantContext;
 import org.eclipse.edc.identityhub.spi.participantcontext.model.ParticipantManifest;
 import org.eclipse.edc.junit.extensions.DependencyInjectionExtension;
 import org.eclipse.edc.spi.EdcException;
@@ -31,11 +30,12 @@ class SuperUserSeedExtensionTest {
     private static final String SUPER_USER_PARTICIPANT_ID = "super-user";
     private static final String API_TOKEN_ALIAS = "super-user-apikey";
     private static final String SUPER_USER_API_KEY = "c3VwZXItdXNlcg==.devpass";
+    private static final String ROLE_ADMIN = "admin";
 
-    private final ParticipantContextService participantContextService = mock();
+    private final IdentityHubParticipantContextService participantContextService = mock();
     private final Vault vault = mock();
     private final Monitor monitor = mock();
-    private final ParticipantContext participantContext = mock();
+    private final IdentityHubParticipantContext participantContext = mock();
 
     private ServiceExtensionContext context;
     private ObjectFactory factory;
@@ -46,7 +46,7 @@ class SuperUserSeedExtensionTest {
         this.factory = factory;
 
         when(context.getMonitor()).thenReturn(monitor);
-        context.registerService(ParticipantContextService.class, participantContextService);
+        context.registerService(IdentityHubParticipantContextService.class, participantContextService);
         context.registerService(Vault.class, vault);
     }
 
@@ -82,7 +82,7 @@ class SuperUserSeedExtensionTest {
         assertThat(key.getKeyId()).isEqualTo("super-user#key-1");
         assertThat(key.getPrivateKeyAlias()).isEqualTo("super-user#key-1");
         assertThat(key.getKeyGeneratorParams()).containsEntry("algorithm", "EdDSA").containsEntry("curve", "Ed25519");
-        assertThat(manifest.getRoles()).containsExactly(ServicePrincipal.ROLE_ADMIN);
+        assertThat(manifest.getScopes()).containsExactly(ROLE_ADMIN);
 
         verify(monitor).info(contains("Super User key not provided. Generated:"));
         verifyNoInteractions(vault);

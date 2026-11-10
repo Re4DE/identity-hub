@@ -14,8 +14,7 @@
 
 package de.fraunhofer.iee.identityhub.superuser;
 
-import org.eclipse.edc.identityhub.spi.authentication.ServicePrincipal;
-import org.eclipse.edc.identityhub.spi.participantcontext.ParticipantContextService;
+import org.eclipse.edc.identityhub.spi.participantcontext.IdentityHubParticipantContextService;
 import org.eclipse.edc.identityhub.spi.participantcontext.model.KeyDescriptor;
 import org.eclipse.edc.identityhub.spi.participantcontext.model.ParticipantManifest;
 import org.eclipse.edc.runtime.metamodel.annotation.Extension;
@@ -35,12 +34,17 @@ import static java.util.Optional.ofNullable;
 @Extension(value = "Super User Seed Extension")
 public class SuperUserSeedExtension implements ServiceExtension {
     public static final String DEFAULT_SUPER_USER_PARTICIPANT_ID = "super-user";
+    public static final String ROLE_ADMIN = "identity-api:admin";
+    private static final List<String> SUPER_USER_SCOPES = List.of(
+            ROLE_ADMIN,
+            "issuer-admin-api:admin"
+    );
 
     @Setting(key = "edc.ih.api.superuser.key", description = "Explicitly set the initial API key for the Super User, if empty autogenerate", required = false)
     private String superUserApiKey;
 
     @Inject
-    private ParticipantContextService participantContextService;
+    private IdentityHubParticipantContextService participantContextService;
 
     @Inject
     private Vault vault;
@@ -70,7 +74,7 @@ public class SuperUserSeedExtension implements ServiceExtension {
                                 .keyId("%s#key-1".formatted(DEFAULT_SUPER_USER_PARTICIPANT_ID))
                                 .privateKeyAlias("%s#key-1".formatted(DEFAULT_SUPER_USER_PARTICIPANT_ID))
                                 .build())
-                        .roles(List.of(ServicePrincipal.ROLE_ADMIN))
+                        .scopes(SUPER_USER_SCOPES)
                         .build())
                 // If the creation was successful, we set the api or generate it if not present
                 .onSuccess(generatedKey -> {
