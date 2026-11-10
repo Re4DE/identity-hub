@@ -21,7 +21,7 @@ COPY . .
 RUN chmod +x ./gradlew
 RUN ./gradlew clean runtimes:identityhub:build
 
-FROM eclipse-temurin:22.0.2_9-jre-alpine
+FROM eclipse-temurin:24.0.2_12-jre-alpine
 
 # Optional JVM arguments, such as memory settings
 ARG JVM_ARGS=""
