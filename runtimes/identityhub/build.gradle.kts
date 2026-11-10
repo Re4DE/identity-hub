@@ -29,7 +29,7 @@ application {
 
 tasks.shadowJar {
     mergeServiceFiles()
-    archiveFileName.set("issuer.jar")
+    archiveFileName.set("identityhub.jar")
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
