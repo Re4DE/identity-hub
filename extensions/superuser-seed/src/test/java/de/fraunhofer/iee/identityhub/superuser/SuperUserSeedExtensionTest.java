@@ -29,8 +29,8 @@ class SuperUserSeedExtensionTest {
 
     private static final String SUPER_USER_PARTICIPANT_ID = "super-user";
     private static final String API_TOKEN_ALIAS = "super-user-apikey";
-    private static final String SUPER_USER_API_KEY = "c3VwZXItdXNlcg==.devpass";
-    private static final String ROLE_ADMIN = "admin";
+    private static final String SUPER_USER_API_KEY = "c3VwZXItdXNlcg==.ZGV2cGFzcw==";
+    private static final String[] SUPER_USER_ROLE = { "identity-api:admin", "identity-api:write", "identity-api:read" };
 
     private final IdentityHubParticipantContextService participantContextService = mock();
     private final Vault vault = mock();
@@ -81,8 +81,8 @@ class SuperUserSeedExtensionTest {
         assertThat(key).isNotNull();
         assertThat(key.getKeyId()).isEqualTo("super-user#key-1");
         assertThat(key.getPrivateKeyAlias()).isEqualTo("super-user#key-1");
-        assertThat(key.getKeyGeneratorParams()).containsEntry("algorithm", "EdDSA").containsEntry("curve", "Ed25519");
-        assertThat(manifest.getScopes()).containsExactly(ROLE_ADMIN);
+        assertThat(key.getKeyGeneratorParams()).containsEntry("algorithm", "EdDSA");
+        assertThat(manifest.getScopes()).containsExactly(SUPER_USER_ROLE);
 
         verify(monitor).info(contains("Super User key not provided. Generated:"));
         verifyNoInteractions(vault);

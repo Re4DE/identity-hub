@@ -3,8 +3,8 @@ format.version = "1.1"
 
 [versions]
 edc = "0.18.1"
-edc-build = "1.1.2"
-shadow = "9.2.2"
+edc-build = "1.5.2"
+shadow = "9.4.2"
 
 [libraries]
 # edc libs

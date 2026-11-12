@@ -33,12 +33,9 @@ import static java.util.Optional.ofNullable;
 
 @Extension(value = "Super User Seed Extension")
 public class SuperUserSeedExtension implements ServiceExtension {
-    public static final String DEFAULT_SUPER_USER_PARTICIPANT_ID = "super-user";
-    public static final String ROLE_ADMIN = "identity-api:admin";
-    private static final List<String> SUPER_USER_SCOPES = List.of(
-            ROLE_ADMIN,
-            "issuer-admin-api:admin"
-    );
+    private static final String DEFAULT_SUPER_USER_PARTICIPANT_ID = "super-user";
+
+    private static final List<String> DEFAULT_SUPER_USER_SCOPES = List.of("identity-api:admin", "identity-api:write", "identity-api:read");
 
     @Setting(key = "edc.ih.api.superuser.key", description = "Explicitly set the initial API key for the Super User, if empty autogenerate", required = false)
     private String superUserApiKey;
@@ -70,11 +67,11 @@ public class SuperUserSeedExtension implements ServiceExtension {
                         .did("did:web:%s".formatted(DEFAULT_SUPER_USER_PARTICIPANT_ID))
                         .active(true)
                         .key(KeyDescriptor.Builder.newInstance()
-                                .keyGeneratorParams(Map.of("algorithm", "EdDSA", "curve", "Ed25519"))
+                                .keyGeneratorParams(Map.of("algorithm", "EdDSA"))
                                 .keyId("%s#key-1".formatted(DEFAULT_SUPER_USER_PARTICIPANT_ID))
                                 .privateKeyAlias("%s#key-1".formatted(DEFAULT_SUPER_USER_PARTICIPANT_ID))
                                 .build())
-                        .scopes(SUPER_USER_SCOPES)
+                        .scopes(DEFAULT_SUPER_USER_SCOPES)
                         .build())
                 // If the creation was successful, we set the api or generate it if not present
                 .onSuccess(generatedKey -> {
